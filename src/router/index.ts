@@ -3,10 +3,11 @@ import Layout from '@/layout/index.vue'
 import type { RouteRecordRaw } from 'vue-router'
 import { homeRouting } from "@/pages/home/home.routing"
 import { aboutRouting } from "@/pages/about/about.routing"
-
+import { formRouting } from "@/pages/form/form.routing"
 export const constantRoutes: RouteRecordRaw[] = [
   homeRouting,
   aboutRouting,
+  formRouting,
   {
     path: '/',
     component: Layout,

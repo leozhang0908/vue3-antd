@@ -18,25 +18,23 @@
           </template>
         </router-view>
       </div>
-
     </Layout.Content>
   </Layout>
 </template>
 
 <script lang="ts" setup>
 // import { ref } from 'vue';
-import { Layout } from 'ant-design-vue';
-import Logo from './logo/index.vue';
-import AsideMenu from './menu/menu.vue';
-import PageHeader from './header/index.vue';
+import { Layout } from "ant-design-vue";
+import Logo from "./logo/index.vue";
+import AsideMenu from "./menu/menu.vue";
+import PageHeader from "./header/index.vue";
 </script>
 
 <style lang="less" scoped>
 .layout {
   display: flex;
-  height: 100vh;
-  overflow: hidden;
-
+  min-height: 100%;
+  width: 100%;
   .ant-layout {
     overflow: hidden;
   }
@@ -45,6 +43,7 @@ import PageHeader from './header/index.vue';
     flex: none;
     position: relative;
     margin: @margin-lg;
+    margin-top: @layout-header-height + @margin-lg;
   }
 
   .layout-content-wide {

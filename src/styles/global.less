@@ -25,12 +25,16 @@
 *::-webkit-scrollbar-thumb:hover {
   background-color: #bbb;
 }
-
+html,
+body,
+#app {
+  height: 100%;
+}
 .ion-modals {
   position: relative;
   z-index: 20;
 
-  &>div {
+  & > div {
     position: relative;
 
     .ant-modal-wrap {

@@ -1,3 +1,55 @@
 <div class="page-about ion-page">
-    <a-table :dataSource="items" :columns="columns" />
+    <a-form ref="formRef" name="advanced_search" class="ant-advanced-search-form" :model="formState" @finish="onFinish">
+        <a-row :gutter="24">
+            <template v-for="i in 10" :key="i">
+                <a-col v-show="expand || i <= 6" :span="8">
+                    <a-form-item :name="`field-${i}`" :label="`field-${i}`"
+                        :rules="[{ required: true, message: 'input something' }]">
+                        <a-input v-model:value="formState[`field-${i}`]" placeholder="placeholder"></a-input>
+                    </a-form-item>
+                </a-col>
+            </template>
+        </a-row>
+        <a-row>
+            <a-col :span="24" style="text-align: right">
+                <a-button type="primary" html-type="submit">Search</a-button>
+                <a-button style="margin: 0 8px" @click="() => formRef.resetFields()">Clear</a-button>
+                <a style="font-size: 12px" @click="expand = !expand">
+                    <template v-if="expand">
+                        <UpOutlined />
+                    </template>
+                    <template v-else>
+                        <DownOutlined />
+                    </template>
+                    Collapse
+                </a>
+            </a-col>
+        </a-row>
+    </a-form>
+    <a-table :columns="columns" :data-source="items" bordered>
+        <template #bodyCell="{ column, text, record }">
+            <template v-if="['name', 'age', 'address'].includes(column.dataIndex)">
+                <div>
+                    <a-input v-if="editableData[record.key]" v-model:value="editableData[record.key][column.dataIndex]"
+                        style="margin: -5px 0" />
+                    <template v-else>
+                        {{ text }}
+                    </template>
+                </div>
+            </template>
+            <template v-else-if="column.dataIndex === 'operation'">
+                <div class="editable-row-operations">
+                    <span v-if="editableData[record.key]">
+                        <a-typography-link @click="save(record.key)">Save</a-typography-link>
+                        <a-popconfirm title="Sure to cancel?" @confirm="cancel(record.key)">
+                            <a>Cancel</a>
+                        </a-popconfirm>
+                    </span>
+                    <span v-else>
+                        <a @click="edit(record.key)">Edit</a>
+                    </span>
+                </div>
+            </template>
+        </template>
+    </a-table>
 </div>
