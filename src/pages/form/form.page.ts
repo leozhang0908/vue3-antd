@@ -4,10 +4,12 @@ import { FormInstance } from 'ant-design-vue';
 import { cloneDeep } from 'lodash-es';
 import { reactive, ref } from 'vue';
 import { Options, Vue } from 'vue-class-component'
+import lupload from '@/components/lupload.vue'
 @Options({
   components: {
     DownOutlined,
-    UpOutlined
+    UpOutlined,
+    lupload
   }
 })
 export default class extends Vue {

@@ -18,3 +18,4 @@ declare module '@vue/runtime-core' {
     $modal: { create(component: Component, componentProps?: {}, modalProps?: ModalProps): Promise<IonModal>, zIndex: number }
   }
 }
+

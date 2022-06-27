@@ -3,35 +3,20 @@
     <Space :size="20">
       <slot>
         <Space :size="20">
-          <span
-            class="menu-fold"
-            @click="() => emit('update:collapsed', !collapsed)"
-          >
-            <component
-              :is="collapsed ? MenuUnfoldOutlined : MenuFoldOutlined"
-            />
+          <span class="menu-fold" @click="() => emit('update:collapsed', !collapsed)">
+            <component :is="collapsed ? MenuUnfoldOutlined : MenuFoldOutlined" />
           </span>
           <Breadcrumb>
-            <template
-              v-for="(routeItem, rotueIndex) in menus"
-              :key="routeItem?.path"
-            >
+            <template v-for="(routeItem, rotueIndex) in menus" :key="routeItem?.path">
               <Breadcrumb.Item>
                 <span>{{ routeItem?.meta?.title }}</span>
                 <template v-if="routeItem?.children?.length" #overlay>
                   <Menu :selected-keys="getSelectKeys(rotueIndex)">
-                    <template
-                      v-for="childItem in routeItem?.children"
-                      :key="childItem.name"
-                    >
-                      <Menu.Item
-                        v-if="
-                          !childItem.meta?.hidden &&
-                          childItem.meta?.breadcrumb !== false
-                        "
-                        :key="childItem.name"
-                        @click="clickMenuItem(childItem)"
-                      >
+                    <template v-for="childItem in routeItem?.children" :key="childItem.name">
+                      <Menu.Item v-if="
+                        !childItem.meta?.hidden &&
+                        childItem.meta?.breadcrumb !== false
+                      " :key="childItem.name" @click="clickMenuItem(childItem)">
                         {{ childItem.meta?.title }}
                         <!-- <TitleI18n :title="childItem.meta?.title" /> -->
                       </Menu.Item>
@@ -45,21 +30,24 @@
       </slot>
     </Space>
     <Space :size="20">
+      <SettingOutlined/>
       <Dropdown placement="bottomRight">
         <Avatar :src="userInfo.headImg" :alt="userInfo.name">{{
-          userInfo.name
+            userInfo.name
         }}</Avatar>
         <template #overlay>
           <Menu>
             <Menu.Item @click="$router.push({ name: 'account-about' })">
               关于
             </Menu.Item>
-            <Menu.Item @click="$router.push({ name: 'account-settings' })">
-              个人设置
+            <Menu.Item @click="$router.push({ name: 'account-page' })">
+              个人中心
             </Menu.Item>
             <Menu.Divider />
             <Menu.Item>
-              <div @click.prevent="doLogout"><poweroff-outlined />退出系统</div>
+              <div @click.prevent="doLogout">
+                <poweroff-outlined /> 退出
+              </div>
             </Menu.Item>
           </Menu>
         </template>
@@ -76,6 +64,7 @@ import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   PoweroffOutlined,
+  SettingOutlined
 } from '@ant-design/icons-vue';
 import {
   Layout,

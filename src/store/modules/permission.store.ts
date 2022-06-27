@@ -7,6 +7,7 @@ import { resolve } from '@/utils/path';
 interface Permission {
   /** 需要缓存的路由组件名称列表 */
   routes: RouteRecordRaw[];
+  menus: RouteRecordRaw[];
   dynamicRoutes: RouteRecordRaw[];
 }
 const hasPermission = (roles: string[], route: RouteRecordRaw) => {
@@ -34,10 +35,30 @@ export const usePermissionStore = defineStore({
   id: 'permission',
   state: (): Permission => ({
     routes: [],
-    dynamicRoutes: []
+    dynamicRoutes: [],
+    menus: [],
   }),
-  getters: {
-    menus(): RouteRecordRaw[] {
+  actions: {
+    generateRoutes(roles: string[]) {
+      let accessedRoutes = []
+      if (roles.includes('admin')) {
+        accessedRoutes = asyncRoutes
+      } else {
+        accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
+      }
+      this.addRoutes(accessedRoutes);
+      this.menus = this.getMenus();
+      console.log(this.menus)
+    },
+    addRoutes(routes: RouteRecordRaw[]) {
+      this.dynamicRoutes = routes;
+      this.dynamicRoutes.forEach(route => {
+        router.addRoute(route)
+      })
+      this.routes = constantRoutes.concat(routes)
+    },
+
+    getMenus() {
       let map = (item: RouteRecordRaw, parent?: RouteRecordRaw) => {
         if (parent) {
           item.path = resolve(parent.path, item.path,);
@@ -53,27 +74,6 @@ export const usePermissionStore = defineStore({
         return item;
       }
       return this.routes.filter(v => !v.meta?.hidden && v.children?.length).map(x => map(x));
-      // If there is no children, return itself with path removed,
-      // because this.basePath already conatins item's path information
-      // return { ...props.routeItem, path: '' };
-    }
-  },
-  actions: {
-    generateRoutes(roles: string[]) {
-      let accessedRoutes = []
-      if (roles.includes('admin')) {
-        accessedRoutes = asyncRoutes
-      } else {
-        accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
-      }
-      this.addRoutes(accessedRoutes)
-    },
-    addRoutes(routes: RouteRecordRaw[]) {
-      this.dynamicRoutes = routes;
-      this.dynamicRoutes.forEach(route => {
-        router.addRoute(route)
-      })
-      this.routes = constantRoutes.concat(routes)
     }
   },
 });

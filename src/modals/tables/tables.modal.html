@@ -1,3 +1,35 @@
-<div class="tables-modal page-container">
-    <h1>tables modal</h1>
+<div class="modal-tables ion-modal">
+    <a-tabs v-model:activeKey="activeKey" type="card">
+        <a-tab-pane key="1" tab="Tab Title 1">
+            <p>Content of Tab Pane 1</p>
+            <p>Content of Tab Pane 1</p>
+            <p>Content of Tab Pane 1</p>
+        </a-tab-pane>
+        <a-tab-pane key="2" tab="Tab Title 2">
+            <p>Content of Tab Pane 2</p>
+            <p>Content of Tab Pane 2</p>
+            <p>Content of Tab Pane 2</p>
+        </a-tab-pane>
+        <a-tab-pane key="3" tab="Tab Title 3">
+            <p>Content of Tab Pane 3</p>
+            <p>Content of Tab Pane 3</p>
+            <p>Content of Tab Pane 3</p>
+        </a-tab-pane>
+    </a-tabs>
+    <div style="margin-top: 20px" v-if="steps?.length">
+        <a-steps :current="current">
+            <a-step v-for="item in steps" :key="item.title" :title="item.title" />
+        </a-steps>
+        <div class="steps-content">
+            {{ steps[current].content }} point:[{{point[0]}},{{point[1]}}]
+        </div>
+        <div class="steps-action">
+            <a-button v-if="current < steps.length - 1" type="primary" @click="next">Next</a-button>
+            <a-button v-if="current == steps.length - 1" type="primary"
+                @click="message.success('Processing complete!')">
+                Done
+            </a-button>
+            <a-button v-if="current > 0" style="margin-left: 8px" @click="prev">Previous</a-button>
+        </div>
+    </div>
 </div>

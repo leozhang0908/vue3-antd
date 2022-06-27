@@ -1,18 +1,19 @@
 <template>
   <a-modal :class="{ fullscreen: fullscreenModel, mini: miniModel }" class="cx-modal" ref="modalRef"
-    :style="transformStyle" v-model:visible="visible"
+    :style="fullscreenModel ? null : transformStyle" v-model:visible="visible"
     v-bind="omit(modalProps, ['visible', 'title', 'footer', 'onCancel', 'closeIcon', 'onOk', 'closable', 'afterClose'])"
     :footer="null" :closable="false" :mask="false" :maskClosable="false" :forceRender="true"
-    :wrap-style="{ overflow: 'hidden' }" :afterClose="() => afterClose({ data: null })">
-    <component :is='component' v-bind="componentProps" />
+    :wrap-style="{ overflow: 'hidden' }" :afterClose="() => afterClose()">
+    <component :is='component' v-bind="componentProps" @dismiss="dismiss" @minimize="minimize"
+      @fullscreen="fullscreen" />
     <template #title>
       <div ref="modalTitleRef" class="modal-title">
         <span>{{ modalProps?.title }}</span>
-        <a-space>
+        <a-space @click.stop>
           <a-button type="text" @click="minimize(true)"><template #icon>
               <minus-outlined />
             </template></a-button>
-          <a-button type="text" @click="fullscreen(true)"><template #icon>
+          <a-button type="text" @click="fullscreen(!fullscreenModel)"><template #icon>
               <border-outlined />
             </template></a-button>
           <a-button type="text" @click="dismiss()"><template #icon>
@@ -38,7 +39,7 @@ import { modalProps } from 'ant-design-vue/es/modal/Modal';
 import { getStyle } from '@/utils/getStyle';
 export default defineComponent({
   data() {
-    return { modalEl: null }
+    return { modalEl: null, componentData: null }
   },
 
   components: {
@@ -66,7 +67,6 @@ export default defineComponent({
   mounted() {
     this.modalEl = (<HTMLElement>this.$refs.modalEl).parentElement.parentElement.parentElement.parentElement;
     let width = parseFloat(getStyle(this.modalEl.querySelector('.ant-modal-body>*'), 'width'));
-    console.log(this.modalRef, width)
     this.modalProps.width = <any>width;
     this.visible = false;
     this.$nextTick(() => {
@@ -76,16 +76,13 @@ export default defineComponent({
 
   },
   setup() {
+    
     const fullscreenModel = ref<boolean>(false);
     const miniModel = ref<boolean>(false);
     const visible = ref<boolean>(true);
     const modalTitleRef = ref<HTMLElement | null>(null);
     const modalRef = ref<any | null>(null);
     const { x, y, isDragging } = useDraggable(modalTitleRef);
-    const handleOk = (e: MouseEvent) => {
-      console.log(e);
-      visible.value = false;
-    };
     const startX = ref<number>(0);
     const startY = ref<number>(0);
     const startedDrag = ref(false);
@@ -130,7 +127,7 @@ export default defineComponent({
     const transformStyle = computed<CSSProperties>(() => {
       return {
         transform: `translate(${transformX.value}px, ${transformY.value}px)`,
-      };
+      }
     });
 
     return {
@@ -141,7 +138,7 @@ export default defineComponent({
       miniModel,
       modalRef,
       omit,
-      afterClose: ()=>{}
+      afterClose: () => { }
     };
   },
   methods: {
@@ -152,17 +149,19 @@ export default defineComponent({
     present() {
       this.visible = true;
     },
-    dismiss() {
+    dismiss(data?) {
       this.visible = false;
+      this.componentData = data;
     },
     onWillDismiss() {
-      return new Promise(resolve => this.dismiss = () => {
-        resolve({ data: null })
+      return new Promise(resolve => this.dismiss = (data) => {
+        this.componentData = data;
+        resolve({ data })
         this.visible = false;
       })
     },
     onDismissed() {
-      return new Promise(resolve => this.afterClose = () => resolve({ data: null }))
+      return new Promise(resolve => this.afterClose = () => resolve({ data: this.componentData }))
     },
     minimize(miniModel) {
       this.miniModel = miniModel
@@ -174,7 +173,7 @@ export default defineComponent({
       })
     },
     fullscreen(fullModel) {
-      this.miniModel = fullModel
+      this.fullscreenModel = fullModel
     },
     onFullscreen() {
       return new Promise(resolve => this.fullscreen = (fullModel) => {
@@ -213,9 +212,10 @@ export default defineComponent({
   right: 0;
   left: 0;
   border-radius: 2px;
-  resize: both;
-  overflow: auto;
+  // resize: both;
+  // overflow: auto;
   background: #fff;
+  padding-bottom: 0;
 
   &::-webkit-scrollbar {
     width: 10px;

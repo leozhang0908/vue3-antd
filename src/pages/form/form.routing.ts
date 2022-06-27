@@ -6,10 +6,10 @@ export const formRouting: RouteRecordRaw = {
   redirect: '/form',
   children: [{
     path: '',
-    component: () => import(/* webpackChunkName: "about-page" */ '@/pages/form/form.page.vue'),
+    component: () => import(/* webpackChunkName: "form-page" */ '@/pages/form/form.page.vue'),
     name: 'form-page',
     meta: {
-      title: 'form',
+      title: 'form'
     }
   }]
 }

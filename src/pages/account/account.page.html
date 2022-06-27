@@ -1,0 +1,36 @@
+<div class="page-account ion-page">
+    <a-menu style="width: 192px" mode="inline" theme="light">
+        <a-menu-item key="1">
+            基础设置
+        </a-menu-item>
+        <a-menu-item key="2">
+            安全设置
+        </a-menu-item>
+        <a-menu-item key="3">
+            账号绑定
+        </a-menu-item>
+        <a-menu-item key="4">
+            消息通知
+        </a-menu-item>
+    </a-menu>
+    <a-list item-layout="horizontal">
+        <template #header>
+            <h2>基本设置</h2>
+        </template>
+        <a-list-item-meta description="当前密码强度：强"> <template #title>
+                账户密码
+            </template></a-list-item-meta>
+        <a-list-item-meta description="已绑定手机：138****8293"> <template #title>
+                密保手机
+            </template></a-list-item-meta>
+        <a-list-item-meta description="未设置密保问题，密保问题可有效保护账户安全"> <template #title>
+                密保问题
+            </template></a-list-item-meta>
+        <a-list-item-meta description="已绑定邮箱：ant***sign.com"> <template #title>
+                备用邮箱
+            </template></a-list-item-meta>
+        <a-list-item-meta description="未绑定 MFA 设备，绑定后，可以进行二次确认"> <template #title>
+                MFA 设备
+            </template></a-list-item-meta>
+    </a-list>
+</div>

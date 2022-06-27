@@ -6,7 +6,7 @@
         <windows-outlined />
       </template>
       <template #title>
-        {{ props.routeItem.meta?.title }}
+        {{ props.routeItem }}{{ props.routeItem.meta?.title }}
       </template>
       <template v-for="item in props.routeItem.children" :key="item.path || item.fullPath">
         <!-- 递归生成菜单 -->
@@ -30,24 +30,16 @@ export default {
 };
 </script>
 <script setup lang="ts">
-import { type PropType, computed } from 'vue';
+import { type PropType } from 'vue';
 import { Menu } from 'ant-design-vue';
 import type { RouteRecordRaw } from 'vue-router';
 import { WindowsOutlined } from '@ant-design/icons-vue';
-// import { IconFont } from '@/components/basic/iconfont';
-// import { TitleI18n } from '@/components/basic/title-i18n';
-
 
 const props = defineProps({
   routeItem: {
     type: Object as PropType<RouteRecordRaw>,
   },
 });
-const childNumber = () => {
-  if (props.routeItem?.children) {
-    return props.routeItem.children.filter((item) => !item.meta?.hidden).length
-  }
-  return 0
-}
+
 
 </script>

@@ -1,14 +1,14 @@
 <template>
   <div class="menu-container">
-    <Menu v-model:selected-keys="state.selectedKeys" mode="horizontal" :collapsed="props.collapsed"
-      collapsible @click="clickMenuItem">
+    <Menu v-model:selected-keys="state.selectedKeys" mode="horizontal" :collapsed="props.collapsed" collapsible
+      @click="clickMenuItem">
       <MenuItem :route-item="item" v-for="item in permission.menus" :key="item.path" />
     </Menu>
   </div>
 </template>
 
 <script setup lang="ts">
-import { reactive,watch, type PropType } from 'vue';
+import { reactive, watch, type PropType } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { Menu, type MenuTheme } from 'ant-design-vue';
 import MenuItem from './menu-item.vue';
@@ -30,9 +30,9 @@ const state = reactive({
   openKeys: [] as string[],
   selectedKeys: [currentRoute.name] as string[],
 });
-
 const permission = usePermissionStore();
-console.log(permission.routes)
+
+// console.log(menus)
 // const routes = computed(() => {
 //   return permission.routes.filter((route) => !route.meta?.hidden);
 // });
@@ -40,21 +40,6 @@ console.log(permission.routes)
 const getTargetMenuByActiveMenuName = (activeMenu: string) => {
   return router.getRoutes().find((n) => [n.name, n.path].includes(activeMenu));
 };
-
-// // 获取当前打开的子菜单
-// const getOpenKeys = () => {
-//   const meta = currentRoute.meta;
-//   if (meta?.activeMenu) {
-//     const targetMenu = getTargetMenuByActiveMenuName(<any>meta.activeMenu);
-//     return (targetMenu?.meta?.namePath ?? [meta?.activeMenu]) as string[];
-//   }
-
-//   return (
-//     meta?.hideInMenu
-//       ? state?.openKeys || []
-//       : currentRoute.meta?.namePath ?? currentRoute.matched.slice(1).map((n) => n.name)
-//   ) as string[];
-// };
 
 // 监听菜单收缩状态
 watch(
