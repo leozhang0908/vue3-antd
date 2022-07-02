@@ -4,6 +4,7 @@ import { ModalProps } from 'ant-design-vue'
 export interface IonModal {
   present: () => void
   dismiss: () => void
+  focusin: () => void
   onWillDismiss: () => Promise<any>
   onDismissed: () => Promise<any>
   minimize: (mode: boolean) => Promise<boolean>
@@ -11,11 +12,11 @@ export interface IonModal {
   fullscreen: (mode: boolean) => Promise<boolean>
   onFullscreen: () => Promise<boolean>
   zIndex: number
+  id: any;
 }
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
-    $modal: { create(component: Component, componentProps?: {}, modalProps?: ModalProps): Promise<IonModal>, zIndex: number }
+    $modal: { create(component: Component | string, componentProps?: {}, modalProps?: ModalProps & { id?, icon?}): Promise<IonModal>, zIndex: number }
   }
 }
-

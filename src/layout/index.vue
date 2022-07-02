@@ -9,13 +9,9 @@
     <Layout.Content class="layout-content">
       <div class="layout-content-wide">
         <router-view v-slot="{ Component }">
-          <template v-if="Component">
-            <transition name="fade-transform" mode="out-in" appear>
-              <keep-alive>
-                <component :is="Component" />
-              </keep-alive>
-            </transition>
-          </template>
+          <keep-alive>
+            <component :is="Component" />
+          </keep-alive>
         </router-view>
       </div>
     </Layout.Content>
@@ -23,7 +19,6 @@
 </template>
 
 <script lang="ts" setup>
-// import { ref } from 'vue';
 import { Layout } from "ant-design-vue";
 import Logo from "./logo/index.vue";
 import AsideMenu from "./menu/menu.vue";
@@ -35,6 +30,7 @@ import PageHeader from "./header/index.vue";
   display: flex;
   min-height: 100%;
   width: 100%;
+
   .ant-layout {
     overflow: hidden;
   }

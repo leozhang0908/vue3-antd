@@ -6,7 +6,7 @@ import { message } from 'ant-design-vue';
 @Options({
   name: 'tables-modal',
   props: {
-    point: Object
+    point: { default: [0, 0] }
   }
 })
 

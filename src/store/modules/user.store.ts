@@ -16,7 +16,7 @@ interface UserState {
 export const useUserStore = defineStore({
   id: 'user',
   state: (): UserState => ({
-    token: 'ACCESS_TOKEN_KEY' || Storage.get('ACCESS_TOKEN_KEY', null),
+    token: 'ACCESS_TOKEN_KEY'||Storage.get('ACCESS_TOKEN_KEY', null),
     name: 'amdin',
     avatar: '',
     menus: [],
@@ -51,12 +51,11 @@ export const useUserStore = defineStore({
       Storage.set('ACCESS_TOKEN_KEY', this.token);
     },
     /** 登录 */
-    async login(userInfo: { phone: string, password: string }) {
-      const { phone, password } = userInfo
-      return UsersService.login({ phone: phone.trim(), password })
-        .then(res => {
+    async getAuth(userInfo: { code: string, appId: string }) {
+      return UsersService.login(userInfo)
+        .then(async res => {
           this.setToken(res)
-          // this.GetUserInfo()
+          return await this.getUserInfo()
         }).catch(ex => ex)
     },
     /** 登录成功之后, 获取用户信息以及生成权限路由 */

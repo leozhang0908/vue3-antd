@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { useUserStore } from '@/store/modules/user.store'
 import { message } from 'ant-design-vue'
-// import { Toast } from '@/utils/toast'
 
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
@@ -11,7 +10,7 @@ const service = axios.create({
 
 const exNull = (obj?: any) => {
   if (!obj) return {}
-  const nobj:any = {}
+  const nobj: any = {}
   const keys = Object.keys(obj)
   keys.forEach(key => {
     let val = typeof (obj[key]) == 'string' ? obj[key].trim() : obj[key];
@@ -24,12 +23,13 @@ const exNull = (obj?: any) => {
 
 // Request interceptors
 service.interceptors.request.use(
-  (config:any) => {
-    config.headers['Content-Type'] = 'application/json;charset=UTF-8'
+  (config: any) => {
+    config.headers['Content-Type'] = 'application/json;charset=UTF-8';
+    config.headers['appId'] = process.env.VUE_APP_ID;//process.env.APP_ID
     // Add Authorization header to every request, you can add other custom headers here
     const userStore = useUserStore();
-    if (userStore.token) {
-      config.headers.Authorization = 'Bearer ' + userStore.token
+    if (userStore.getToken) {
+      config.headers['X-Acess-Token'] = userStore.getToken
     }
     if (config.data) {
       config.data = exNull(config.data)
@@ -49,7 +49,11 @@ service.interceptors.response.use(
   (error) => {
     message.error(error?.response?.data?.message || error.message)
     if (error?.response?.status == 401) {
-      location.reload()
+      // location.reload()
+      if (!location.search.includes('code')) {
+        location.replace(error?.response?.data)
+        useUserStore().resetToken();
+      }
     }
     console.error(error)
     return Promise.reject(error)

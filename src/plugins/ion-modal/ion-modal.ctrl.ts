@@ -1,8 +1,8 @@
-import MyModal from '../components/MyModal.vue';
-import { App, inject, Plugin, h, render, Component, getCurrentInstance } from 'vue'
-import { IonModal } from '@/type';
-
-export const IonModalSymbol = Symbol()
+import IonModalCom from './ion-modal.vue';
+import { App, h, render, Component, getCurrentInstance } from 'vue'
+import { IonModal } from './ion-modal.type';
+import IonModalToolbar from './ion-modal.toolbar.vue';
+import { ModalProps } from 'ant-design-vue';
 
 export class IonModalController {
     private _$containers: HTMLDivElement
@@ -13,8 +13,14 @@ export class IonModalController {
         this._$containers = document.createElement("div");
         this._$containers.classList.add('ion-modals')
         document.body.appendChild(this._$containers);
+        setTimeout(() => {
+            const vnode = h(IonModalToolbar)
+            // 关联app上下文
+            vnode.appContext = this._app._context || getCurrentInstance()?.appContext
+            render(vnode, document.createElement("div"))
+        }, 800)
     }
-    public create(component: Component, componentProps: {}, modalProps?: any): Promise<IonModal> {
+    public create(component: Component|string, componentProps: {}, modalProps?: ModalProps & { id?, icon?}): Promise<IonModal> {
         return new Promise((reslove, reject) => {
             if (!this._app) {
                 reject('_app is undefined')
@@ -25,7 +31,7 @@ export class IonModalController {
                 ...modalProps,
             }
 
-            const vnode = h(MyModal, {
+            const vnode = h(IonModalCom, {
                 modalProps: modalOpts,
                 componentProps,
                 component,
@@ -35,25 +41,9 @@ export class IonModalController {
             // 关联app上下文
             vnode.appContext = this._app._context || getCurrentInstance()?.appContext
             render(vnode, document.createElement("div"));
+            // let instance = (<any>vnode.component)!.ctx;
+            // instance.id = modalProps.id || ('ion-modal-' + (this.modals.length + 1));
+            // modalStore.add(instance)
         });
     }
 }
-
-
-export function useDzModal(): IonModalController {
-
-    const dzModal = inject<IonModalController>(IonModalSymbol)
-    if (!dzModal) {
-        throw new Error('No DzModal provided!')
-    }
-    return dzModal;
-}
-
-const plugin: Plugin = {
-    install(app: App) {
-        const dzModal = new IonModalController(app)
-        app.config.globalProperties.$modal = dzModal;
-        app.provide(IonModalSymbol, dzModal);
-    }
-}
-export default plugin;

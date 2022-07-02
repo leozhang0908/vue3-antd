@@ -14,7 +14,6 @@ const props = defineProps({
     type: Object as PropType<LuckyCell | LuckyCell[]>,
   }
 });
-const emit = defineEmits(['onChange']);
 function setData(row: LuckyCell | LuckyCell[]) {
   if (Array.isArray(row)) {
     row.filter(v => setData(v))

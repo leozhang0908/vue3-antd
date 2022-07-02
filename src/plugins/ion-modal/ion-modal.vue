@@ -1,18 +1,20 @@
 <template>
   <a-modal :class="{ fullscreen: fullscreenModel, mini: miniModel }" class="cx-modal" ref="modalRef"
-    :style="fullscreenModel ? null : transformStyle" v-model:visible="visible"
+    :style="{ transform: transformStyle }" v-model:visible="visible"
     v-bind="omit(modalProps, ['visible', 'title', 'footer', 'onCancel', 'closeIcon', 'onOk', 'closable', 'afterClose'])"
-    :footer="null" :closable="false" :mask="false" :maskClosable="false" :forceRender="true"
-    :wrap-style="{ overflow: 'hidden' }" :afterClose="() => afterClose()">
+    :footer="null" :closable="false" :mask="false" :maskClosable="false" :wrap-style="{ overflow: 'hidden' }"
+    :afterClose="() => afterClose()" forceRender :transitionName="null">
     <component :is='component' v-bind="componentProps" @dismiss="dismiss" @minimize="minimize"
       @fullscreen="fullscreen" />
     <template #title>
       <div ref="modalTitleRef" class="modal-title">
         <span>{{ modalProps?.title }}</span>
         <a-space @click.stop>
-          <a-button type="text" @click="minimize(true)"><template #icon>
+          <a-button type="text" @click="minimize(true)">
+            <template #icon>
               <minus-outlined />
-            </template></a-button>
+            </template>
+          </a-button>
           <a-button type="text" @click="fullscreen(!fullscreenModel)"><template #icon>
               <border-outlined />
             </template></a-button>
@@ -24,24 +26,25 @@
       </div>
     </template>
     <template #modalRender="{ originVNode }">
-      <div @mousedown="focusin($event)" ref="modalEl">
+      <div @mousedown="focusin" ref="modalEl">
         <component :is="originVNode" />
       </div>
     </template>
   </a-modal>
 </template>
 <script lang="ts">
-import { defineComponent, ref, computed, CSSProperties, watch, watchEffect } from 'vue';
+import { defineComponent, ref, computed, watchEffect, Component } from 'vue';
+import type { PropType } from 'vue';
 import { omit } from 'lodash-es';
-import { useDraggable } from '@vueuse/core';
+import { useDraggable, watchThrottled } from '@vueuse/core';
 import { MinusOutlined, BorderOutlined, CloseOutlined } from '@ant-design/icons-vue';
-import { modalProps } from 'ant-design-vue/es/modal/Modal';
 import { getStyle } from '@/utils/getStyle';
+import { useModalStoreWithOut } from '@/store/modules/modal.store';
+const modalStore = useModalStoreWithOut()
 export default defineComponent({
   data() {
-    return { modalEl: null, componentData: null }
+    return { modalEl: null, componentData: null, id: null, title: '' }
   },
-
   components: {
     MinusOutlined,
     BorderOutlined,
@@ -49,7 +52,7 @@ export default defineComponent({
   },
   props: {
     modalProps: {
-      type: modalProps,
+      type: Object,
       default: {}
     },
     componentProps: {
@@ -57,7 +60,7 @@ export default defineComponent({
       default: {}
     },
     component: {
-      type: Object,
+      type: [Object, String] as PropType<Component | string>,
       requried: true
     },
     onCreated: {
@@ -67,16 +70,23 @@ export default defineComponent({
   mounted() {
     this.modalEl = (<HTMLElement>this.$refs.modalEl).parentElement.parentElement.parentElement.parentElement;
     let width = parseFloat(getStyle(this.modalEl.querySelector('.ant-modal-body>*'), 'width'));
-    this.modalProps.width = <any>width;
+    let modaBody = this.modalEl.querySelector('.ant-modal-body')
+    let paddingRight = parseFloat(getStyle(modaBody, 'paddingRight'));
+    let paddingLeft = parseFloat(getStyle(modaBody, 'paddingLeft'));
+    this.modalProps.width = <any>width + paddingRight + paddingLeft;
+    this.id = (<any>this.modalProps).id || (modalStore.modals.length + 1);
+    this.title = (<any>this.modalProps).title;
+
+    this.modalProps.destroyOnClose = false;
     this.visible = false;
     this.$nextTick(() => {
       this.modalProps.wrapClassName = <any>'ready';
       this.onCreated(this.modalRef);
+      this.modalProps.destroyOnClose = true;
     });
-
   },
   setup() {
-    
+
     const fullscreenModel = ref<boolean>(false);
     const miniModel = ref<boolean>(false);
     const visible = ref<boolean>(true);
@@ -86,12 +96,13 @@ export default defineComponent({
     const startX = ref<number>(0);
     const startY = ref<number>(0);
     const startedDrag = ref(false);
-    const transformX = ref(0);
-    const transformY = ref(0);
+    const pos = modalStore.modals.length * 40
+    const transformX = ref(pos);
+    const transformY = ref(pos);
     const preTransformX = ref(0);
     const preTransformY = ref(0);
     const dragRect = ref({ left: 0, right: 0, top: 0, bottom: 0 });
-    watch([x, y], () => {
+    watchThrottled([x, y], () => {
       if (fullscreenModel.value) return;
       if (!startedDrag.value) {
         startX.value = x.value;
@@ -104,13 +115,13 @@ export default defineComponent({
         preTransformY.value = transformY.value;
       }
       startedDrag.value = true;
-    });
+    }, { throttle: 300 });
 
-    watch(isDragging, () => {
+    watchThrottled(isDragging, () => {
       if (!isDragging) {
         startedDrag.value = false;
       }
-    });
+    }, { throttle: 90 });
 
     watchEffect(() => {
       if (startedDrag.value) {
@@ -124,10 +135,9 @@ export default defineComponent({
           startY.value;
       }
     });
-    const transformStyle = computed<CSSProperties>(() => {
-      return {
-        transform: `translate(${transformX.value}px, ${transformY.value}px)`,
-      }
+
+    const transformStyle = computed<String>(() => {
+      return fullscreenModel.value ? null : `translate(${transformX.value}px, ${transformY.value}px)`
     });
 
     return {
@@ -142,22 +152,31 @@ export default defineComponent({
     };
   },
   methods: {
-    focusin(e: any) {
-      this.$modal.zIndex += 1;
-      this.modalEl.style.zIndex = this.$modal.zIndex
-    },
-    present() {
-      this.visible = true;
-    },
-    dismiss(data?) {
+    _close(data?) {
       this.visible = false;
       this.componentData = data;
+      modalStore.remove(this.id)
+    },
+    show() {
+      this.visible = true;
+      this.minimize(false)
+    },
+    focusin() {
+      this.$modal.zIndex += 1;
+      this.modalEl.style.zIndex = this.$modal.zIndex
+      this.show()
+    },
+    present() {
+      this.focusin();
+      modalStore.add(this)
+    },
+    dismiss(data?) {
+      this._close(data)
     },
     onWillDismiss() {
       return new Promise(resolve => this.dismiss = (data) => {
-        this.componentData = data;
+        this._close(data)
         resolve({ data })
-        this.visible = false;
       })
     },
     onDismissed() {
@@ -212,8 +231,8 @@ export default defineComponent({
   right: 0;
   left: 0;
   border-radius: 2px;
-  // resize: both;
-  // overflow: auto;
+  resize: both;
+  overflow: hidden;
   background: #fff;
   padding-bottom: 0;
 

@@ -16,7 +16,7 @@ router.beforeEach(async (to: RouteLocationNormalized, _: RouteLocationNormalized
   NProgress.start()
   const user = useUserStore()
   // Determine whether the user has logged in
-  if (user.token) {
+  if (user.getToken) {
     if (to.path === '/login') {
       // If is logged in, redirect to the home page
       next({ path: '/' })
@@ -27,10 +27,13 @@ router.beforeEach(async (to: RouteLocationNormalized, _: RouteLocationNormalized
         try {
           // Note: roles must be a object array! such as: ['admin'] or ['developer', 'editor']
           user.getUserInfo()
+
+          // await user.getAuth({ code: <string>to.query.code, appId: '62bc0178d521423324dfa641' })
           const roles = user.getRoles;
           const permission = usePermissionStore()
           // Generate accessible routes map based on role
           permission.generateRoutes(roles)
+          to.query.code = undefined
           // Hack: ensure addRoutes is complete
           // Set the replace: true, so the navigation will not leave a history record
           next({ ...to, replace: true })
@@ -53,8 +56,10 @@ router.beforeEach(async (to: RouteLocationNormalized, _: RouteLocationNormalized
       // In the free login whitelist, go directly
       next()
     } else {
+      // debugger
       // Other pages that do not have permission to access are redirected to the login page.
       next(`/login?redirect=${to.path}`)
+      next();
       NProgress.done()
     }
   }

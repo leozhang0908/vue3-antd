@@ -1,0 +1,41 @@
+[{
+    "name": "小应用A",
+    "icon": "FundProjectionScreenOutlined",
+    "component": "TablesModal",
+    "url": ""
+}, {
+    "name": "小应用B",
+    "icon": "FundProjectionScreenOutlined",
+    "component": "TablesModal",
+    "url": ""
+}, {
+    "name": "小应用C",
+    "icon": "FundProjectionScreenOutlined",
+    "component": "TablesModal",
+    "data":{},
+    "url": ""
+}, {
+    "name": "小应用D",
+    "icon": "CopyOutlined",
+    "component": "HelloModal",
+    "url": ""
+}, {
+    "name": "小应用E",
+    "icon": "FundProjectionScreenOutlined",
+    "component": "HelloModal",
+    "url": ""
+}, {
+    "name": "小应用F",
+    "icon": "FundProjectionScreenOutlined",
+    "component": "TablesModal",
+    "url": ""
+}, {
+    "name": "窗应用G",
+    "icon": "FundProjectionScreenOutlined",
+    "target": "_blank",
+    "url": "https://innotron.feishu.cn/wiki/wikcn9nXj52OiQHkAE5zAPDcvVg"
+}, {
+    "name": "窗应用H",
+    "icon": "FundOutlined",
+    "url": "https://innotron.feishu.cn/wiki/wikcn9nXj52OiQHkAE5zAPDcvVg"
+}]

@@ -1,0 +1,1 @@
+export { default as Echart } from './echart.vue';

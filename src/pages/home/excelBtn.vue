@@ -7,18 +7,25 @@
       </div>
     </a-button>
     <a-drawer v-model:visible="data.visible" title="测试表格" :destroyOnClose="true" :width="'60%'" placement="right">
-      <luckysheet></luckysheet>
+      <template #extra>
+        <a-button type="primary" @click="exportData">导出数据</a-button>
+      </template>
+      <luckysheet ref="luckysheet"></luckysheet>
     </a-drawer>
   </div>
 </template>
 <script lang="ts" setup>
-import Luckysheet from './luckysheet/Luckysheet.vue';
-import { reactive } from 'vue'
+import Luckysheet from '@/components/luckysheet/Luckysheet.vue';
+import { reactive, ref } from 'vue'
 const data = reactive({
   visible: false
 })
+const luckysheet = ref()
 function open() {
   data.visible = true
+}
+const exportData = () => {
+  console.log(JSON.stringify(luckysheet.value.getSheetData()))
 }
 </script>
 <style lang="less">

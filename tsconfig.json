@@ -11,11 +11,12 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
-    "strictNullChecks":false,
+    "strictNullChecks": false,
     "noImplicitAny": false,
     "baseUrl": ".",
     "types": [
-      "webpack-env"
+      "webpack-env",
+      "unplugin-vue-define-options"
     ],
     "paths": {
       "@/*": [
