@@ -19,15 +19,12 @@
 </template>
 <script lang="ts" setup>
 import { useModalStore } from '@/store/modules/modal.store'
-import { CloseOutlined } from '@ant-design/icons-vue'
-import { Button, Tooltip } from 'ant-design-vue';
 import { nextTick } from 'vue';
 import { IonModal } from './ion-modal.type';
 let modalStore = useModalStore()
 const remove = (item: IonModal) => {
     item.dismiss();
     nextTick(() => modalStore.remove(item.id))
-
 }
 </script>
 <style lang="less">
