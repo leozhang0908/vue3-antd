@@ -1,6 +1,6 @@
 import IonModalCom from './ion-modal.vue';
 import { App, h, render, Component, getCurrentInstance } from 'vue'
-import { IonModal } from './ion-modal.type';
+import { IonModal } from './typing';
 import IonModalToolbar from './ion-modal.toolbar.vue';
 import { ModalProps } from 'ant-design-vue';
 
@@ -20,7 +20,7 @@ export class IonModalController {
             render(vnode, document.createElement("div"))
         }, 800)
     }
-    public create(component: Component|string, componentProps: {}, modalProps?: ModalProps & { id?, icon?}): Promise<IonModal> {
+    public create(component: Component | string, componentProps: {}, modalProps?: ModalProps & { id?, icon?}): Promise<IonModal> {
         return new Promise((reslove, reject) => {
             if (!this._app) {
                 reject('_app is undefined')
@@ -41,9 +41,6 @@ export class IonModalController {
             // 关联app上下文
             vnode.appContext = this._app._context || getCurrentInstance()?.appContext
             render(vnode, document.createElement("div"));
-            // let instance = (<any>vnode.component)!.ctx;
-            // instance.id = modalProps.id || ('ion-modal-' + (this.modals.length + 1));
-            // modalStore.add(instance)
         });
     }
 }

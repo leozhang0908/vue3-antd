@@ -33,10 +33,10 @@
   </a-modal>
 </template>
 <script lang="ts">
-import { defineComponent, ref, computed, watchEffect, Component } from 'vue';
+import { defineComponent, ref, computed, watchEffect, Component, toRefs, onMounted, watch } from 'vue';
 import type { PropType } from 'vue';
 import { omit } from 'lodash-es';
-import { useDraggable, watchThrottled } from '@vueuse/core';
+import { useDebounceFn, useDraggable, useResizeObserver, watchDebounced, watchThrottled } from '@vueuse/core';
 import { MinusOutlined, BorderOutlined, CloseOutlined } from '@ant-design/icons-vue';
 import { getStyle } from '@/utils/getStyle';
 import { useModalStoreWithOut } from '@/store/modules/modal.store';
@@ -83,10 +83,16 @@ export default defineComponent({
       this.modalProps.wrapClassName = <any>'ready';
       this.onCreated(this.modalRef);
       this.modalProps.destroyOnClose = true;
+      const debouncedFn = useDebounceFn((entries) => {
+        if (!this.fullscreenModel) {
+          this.modalProps.width = entries[0].contentRect.width;
+          this.modalProps.height = entries[0].contentRect.height;
+        }
+      }, 800)
+      useResizeObserver((<any>this.modalEl).querySelector('.cx-modal'), debouncedFn)
     });
   },
   setup() {
-
     const fullscreenModel = ref<boolean>(false);
     const miniModel = ref<boolean>(false);
     const visible = ref<boolean>(true);
@@ -117,11 +123,11 @@ export default defineComponent({
       startedDrag.value = true;
     }, { throttle: 300 });
 
-    watchThrottled(isDragging, () => {
+    watchDebounced(isDragging, () => {
       if (!isDragging) {
         startedDrag.value = false;
       }
-    }, { throttle: 90 });
+    }, { debounce: 300 });
 
     watchEffect(() => {
       if (startedDrag.value) {
@@ -163,7 +169,7 @@ export default defineComponent({
     },
     focusin() {
       this.$modal.zIndex += 1;
-      this.modalEl.style.zIndex = this.$modal.zIndex
+      this.modalEl.style.zIndex = this.$modal.zIndex + ''
       this.show()
     },
     present() {
@@ -206,6 +212,7 @@ export default defineComponent({
 <style lang="less">
 .cx-modal {
   max-width: unset;
+  transform-origin: unset !important;
 
   &.fullscreen {
     width: 100vw !important;
@@ -232,7 +239,7 @@ export default defineComponent({
   left: 0;
   border-radius: 2px;
   resize: both;
-  overflow: hidden;
+  overflow: auto;
   background: #fff;
   padding-bottom: 0;
 
@@ -262,13 +269,14 @@ export default defineComponent({
   .ant-modal-header {
     background: #cfdfed;
     border-bottom: 0px;
-    padding: 0 0 0 16px;
+    padding: 0;
     width: 100%;
     cursor: move;
 
     .ant-modal-title {
       line-height: unset;
       font-size: 14px;
+
     }
 
     .modal-title {
@@ -276,6 +284,7 @@ export default defineComponent({
       justify-content: space-between;
       align-items: center;
       user-select: none;
+      padding-left: 16px;
 
       svg {
         font-size: 12px;

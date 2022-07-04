@@ -7,7 +7,6 @@ module.exports = defineConfig({
   // publicPath: isDev ? '' : querystring.unescape('<%=request.getContextPath()%>'),
   publicPath: '/',
   productionSourceMap: false,
-  // transpileDependencies: true,
   devServer: {
     proxy: {
       [process.env.VUE_APP_BASE_API]: {
@@ -55,7 +54,6 @@ module.exports = defineConfig({
     config.experiments = {
       topLevelAwait: true,
     };
-    // config.resolve.fallback = { path: require.resolve('path-browserify') };
     // use defineOptions https://github.com/sxzz/unplugin-vue-define-options
     config.plugins.push(require('unplugin-vue-define-options/webpack')());
   }
