@@ -30,7 +30,7 @@
       </slot>
     </Space>
     <Space :size="20">
-      <SettingOutlined/>
+      <SettingOutlined />
       <Dropdown placement="bottomRight">
         <Avatar :src="userInfo.headImg" :alt="userInfo.name">{{
             userInfo.name

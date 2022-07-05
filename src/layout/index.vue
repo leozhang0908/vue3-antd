@@ -1,20 +1,21 @@
 <template>
   <Layout class="layout" theme="light">
-    <PageHeader>
-      <template #default>
-        <Logo />
-        <AsideMenu />
-      </template>
-    </PageHeader>
-    <Layout.Content class="layout-content">
-      <div class="layout-content-wide">
-        <router-view v-slot="{ Component }">
-          <keep-alive>
-            <component :is="Component" />
-          </keep-alive>
-        </router-view>
-      </div>
-    </Layout.Content>
+    <Layout.Sider v-model:collapsed="collapsed" :width="asiderWidth" :trigger="null" collapsible class="layout-sider">
+      <Logo :collapsed="collapsed" />
+      <AsideMenu :collapsed="collapsed" />
+    </Layout.Sider>
+    <Layout>
+      <PageHeader v-model:collapsed="collapsed"></PageHeader>
+      <Layout.Content class="layout-content">
+        <div class="layout-content-wide">
+          <router-view v-slot="{ Component }">
+            <keep-alive>
+              <component :is="Component" />
+            </keep-alive>
+          </router-view>
+        </div>
+      </Layout.Content>
+    </Layout>
   </Layout>
 </template>
 
@@ -23,6 +24,10 @@ import { Layout } from "ant-design-vue";
 import Logo from "./logo/index.vue";
 import AsideMenu from "./menu/menu.vue";
 import PageHeader from "./header/index.vue";
+import { ref, computed } from "vue";
+const collapsed = ref<boolean>(false);
+// 自定义侧边栏菜单收缩和展开时的宽度
+const asiderWidth = computed(() => (collapsed.value ? 80 : 220));
 </script>
 
 <style lang="less" scoped>

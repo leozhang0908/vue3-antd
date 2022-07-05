@@ -84,7 +84,7 @@ export default defineComponent({
       this.onCreated(this.modalRef);
       this.modalProps.destroyOnClose = true;
       const debouncedFn = useDebounceFn((entries) => {
-        if (!this.fullscreenModel) {
+        if (!this.fullscreenModel && !this.miniModel) {
           this.modalProps.width = entries[0].contentRect.width;
           this.modalProps.height = entries[0].contentRect.height;
         }
@@ -169,7 +169,7 @@ export default defineComponent({
     },
     focusin() {
       this.$modal.zIndex += 1;
-      this.modalEl.style.zIndex = this.$modal.zIndex + ''
+      this.modalEl.style.zIndex = this.$modal.zIndex
       this.show()
     },
     present() {
@@ -238,8 +238,9 @@ export default defineComponent({
   right: 0;
   left: 0;
   border-radius: 2px;
-  resize: both;
-  overflow: auto;
+  // resize: both;
+  // overflow: auto;
+  overflow: hidden;
   background: #fff;
   padding-bottom: 0;
 

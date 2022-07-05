@@ -1,7 +1,6 @@
 <template>
   <div class="menu-container">
-    <Menu v-model:selected-keys="state.selectedKeys" mode="horizontal" :collapsed="props.collapsed" collapsible
-      @click="clickMenuItem">
+    <Menu v-model:selected-keys="state.selectedKeys" :collapsed="props.collapsed" collapsible @click="clickMenuItem">
       <MenuItem :route-item="item" v-for="item in permission.menus" :key="item.path" />
     </Menu>
   </div>
