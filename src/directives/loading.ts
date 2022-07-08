@@ -3,9 +3,9 @@ import type { Directive, App } from 'vue';
 
 const loadingDirective: Directive = {
   mounted(el, binding) {
-    const tip = el.getAttribute('loading-tip');
-    const background = el.getAttribute('loading-background');
-    const size = el.getAttribute('loading-size');
+    const tip = el.getAttribute('tip');
+    const background = el.getAttribute('background');
+    const size = el.getAttribute('size');
     const fullscreen = !!binding.modifiers.fullscreen;
     const instance = createLoading(
       {
@@ -22,7 +22,7 @@ const loadingDirective: Directive = {
   updated(el, binding) {
     const instance = el.instance;
     if (!instance) return;
-    instance.setTip(el.getAttribute('loading-tip'));
+    instance.setTip(el.getAttribute('tip'));
     if (binding.oldValue !== binding.value) {
       instance.setLoading?.(binding.value && !instance.loading);
     }

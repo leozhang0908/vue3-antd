@@ -5,7 +5,6 @@
 </template>
 <script lang="ts" setup>
 import { computed, type CSSProperties } from 'vue';
-
 const importAll = (requireContext: __WebpackModuleApi.RequireContext) =>
   requireContext.keys().forEach(requireContext);
 try {

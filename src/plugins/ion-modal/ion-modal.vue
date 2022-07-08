@@ -12,8 +12,6 @@ import { omit } from 'lodash-es';
 import { useDraggable, watchDebounced, watchThrottled } from '@vueuse/core';
 import { MinusOutlined, BorderOutlined, CloseOutlined } from '@ant-design/icons-vue';
 import { getStyle } from '@/utils/getStyle';
-import { useModalStoreWithOut } from '@/store/modules/modal.store';
-const modalStore = useModalStoreWithOut()
 export default defineComponent({
   data() {
     return { modalEl: null, componentData: null, id: null }
@@ -45,12 +43,12 @@ export default defineComponent({
     this.modalProps.cancelText = this.modalProps.cancelText || '取消';
     this.modalProps.okText = this.modalProps.okText || '确认';
     this.modalProps.width = Math.min(parseFloat(getStyle(modalBody.querySelector('.ion-modal') || (<any>this.componentRef).$el.firstElementChild, 'width')), document.body.offsetWidth * .8)//<any>width + paddingRight + paddingLeft;
-    this.id = (<any>this.modalProps).id || (modalStore.modals.length + 1);
+    this.id = this.modalProps.id;
     this.modalProps.destroyOnClose = false;
 
     if (modalBody.querySelector('[name="ion-modal-footer"]')) {
       this.modalProps.footer = ' ';
-    } length
+    }
     if (modalBody.querySelector('[name="ion-modal-header"]')) {
       this.modalProps.title = ' ';
     }
@@ -125,19 +123,13 @@ export default defineComponent({
     _close(data?) {
       this.visible = false;
       this.componentData = data;
-      modalStore.remove(this.id)
+      (this.$modal as any).remove(this.id)
     },
     show() {
       this.visible = true;
     },
-    focusin() {
-      this.$modal.zIndex += 1;
-      // this.modalEl.style.zIndex = this.$modal.zIndex
-      this.show()
-    },
     present() {
-      this.focusin();
-      modalStore.add(this)
+      this.show();
     },
     dismiss(data?) {
       this._close(data)

@@ -20,8 +20,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { useIonModal } from '@/plugins/ion-modal';
-import { useModalStore } from '@/store/modules/modal.store';
-let modalStore = useModalStore()
 
 defineProps({
   collapsed: {
@@ -40,15 +38,6 @@ const open = async (item) => {
   if (item.url) {
     let newWin = window.open('', item.target || item.name, 'height=480,width=520,toolbar =no, menubar=no, scrollbars=no, resizeable=no, location=no, status=no,left=300,top=200')
     newWin.document.write(`<body scroll="no" style="margin: 0px;padding: 0px;border:0px;overflow:hidden;"><iframe style="margin: 0px;padding: 0px;border: 0px;width:100%;height:100%" src="${item.url}"></iframe></body>`);
-    modalStore.add({
-      id: item.target || item.name,
-      focusin: () => newWin.focus(), title: item.name,
-      dismiss: () => newWin.close(),
-
-    })
-    newWin.onbeforeunload = () => {
-      modalStore.remove(item.target || item.name);
-    }
   }
 }
 onMounted(() => {

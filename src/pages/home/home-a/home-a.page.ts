@@ -15,13 +15,14 @@ export default class HomeAPage extends Vue {
     lineOpt = { category: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], data: [820, 932, 901, 934, 1290, 1330, 1320] }
     chartOpts = scatterOption;
     heatmapOpts = heatmap()
+    loading = false
     mounted() {
         console.log('mounted', this.$route.query)
         // UsersService.userInfo()
     }
 
     async openHw() {
-        (await this.$modal.create('HelloModal', {}, { title: 'adfsvdc' })).present()
+        (await this.$modal.create('HelloModal', {}, { title: 'adfsvdc', id: 1234235 })).present()
     }
     async onDotClick(item) {
         console.log(item)
@@ -31,9 +32,7 @@ export default class HomeAPage extends Vue {
         modal.onDismissed().then(res => {
             console.log('onDismissed', res)
         })
-        modal.onWillDismiss().then(res => {
-            console.log('onWillDismiss', res)
-        })
+
         console.log(modal)
     }
 

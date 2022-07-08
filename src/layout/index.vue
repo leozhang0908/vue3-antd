@@ -92,6 +92,7 @@ const asiderWidth = computed(() => (collapsed.value ? 56 : 208));
 
   .ion-page {
     padding: 24px;
+    position: relative;
 
     &:not([fullscreen]) {
       background: #fff;
