@@ -9,7 +9,8 @@ export const formRouting: RouteRecordRaw = {
     component: () => import(/* webpackChunkName: "form-page" */ '@/pages/form/form.page.vue'),
     name: 'form-page',
     meta: {
-      title: 'form'
+      title: 'form',
+      icon:'form'
     }
   }]
 }

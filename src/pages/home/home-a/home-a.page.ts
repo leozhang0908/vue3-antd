@@ -1,3 +1,4 @@
+// Created by Leo Zhang on 2022-07-08
 import { Options, Vue } from 'vue-class-component'
 import { heatmap, scatterOption } from '@/class/mock'
 import excelBtn from './excelBtn.vue'
@@ -10,7 +11,7 @@ import { Echart } from '@/components/echart';
     }
 })
 
-export default class HomePage extends Vue {
+export default class HomeAPage extends Vue {
     lineOpt = { category: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], data: [820, 932, 901, 934, 1290, 1330, 1320] }
     chartOpts = scatterOption;
     heatmapOpts = heatmap()

@@ -16,7 +16,7 @@ interface UserState {
 export const useUserStore = defineStore({
   id: 'user',
   state: (): UserState => ({
-    token: 'ACCESS_TOKEN_KEY'||Storage.get('ACCESS_TOKEN_KEY', null),
+    token: 'ACCESS_TOKEN_KEY' || Storage.get('ACCESS_TOKEN_KEY', null),
     name: 'amdin',
     avatar: '',
     menus: [],
@@ -62,7 +62,7 @@ export const useUserStore = defineStore({
     async getUserInfo() {
       try {
         // const [userInfo, { perms, menus }] = await Promise.all([getInfo(), permmenu()]);
-        const userInfo = { "name": "路飞", "nickName": "", "email": "1743369777@qq.com", "phone": "13553550634", "remark": null, "headImg": "https://buqiyuan.gitee.io/img/logo.jpg" }//await UsersService.info();
+        const userInfo = { "name": "路飞", "nickName": "", "email": "1743369777@qq.com", "phone": "13553550634", "remark": null, "headImg": "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80" }//await UsersService.info();
         this.name = userInfo.name;
         this.avatar = userInfo.headImg;
         this.userInfo = userInfo;

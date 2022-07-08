@@ -5,13 +5,12 @@
         <a-col :span="6" v-for="item in appsData" @click="open(item)">
           <div class="gutter-box">
             <ant-icon :name="item.icon" v-if='item?.icon'></ant-icon>
-            <!-- <component :is="item.icon" :style="{ 'font-size': '24px' }" v-if='item?.icon' /> -->
             <div class="title">{{ item?.name }}</div>
           </div>
         </a-col>
       </a-row>
     </template>
-    <div class="logo" @click="visible = true">
+    <div class="logo" @click="visible = true" :style="{ width: collapsed ? '40px' : '100%' }">
       <img src="@/assets/imgs/logo.png" alt="" />
       <!-- <h1 v-show="!collapsed" class="title">EC</h1> -->
     </div>
@@ -66,6 +65,8 @@ onMounted(() => {
   height: @layout-header-height;
   // padding-left: 24px;
   line-height: @layout-header-height;
+  padding: 14px;
+  transition: .3s cubic-bezier(.645, .045, .355, 1);
 
   img {
     height: 26px;

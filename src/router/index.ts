@@ -5,13 +5,11 @@ import { homeRouting } from "@/pages/home/home.routing"
 import { aboutRouting } from "@/pages/about/about.routing"
 import { formRouting } from "@/pages/form/form.routing"
 import { accountRouting } from "@/pages/account/account.routing"
-import { mapRouting } from "@/pages/map/map.routing"
 export const constantRoutes: RouteRecordRaw[] = [
   homeRouting,
   aboutRouting,
   formRouting,
   accountRouting,
-  mapRouting,
   {
     path: '/',
     component: Layout,

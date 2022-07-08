@@ -12,6 +12,7 @@ export const aboutRouting: RouteRecordRaw = {
     name: 'about-page',
     meta: {
       title: 'about',
+      icon:'about'
     }
   }]
 }

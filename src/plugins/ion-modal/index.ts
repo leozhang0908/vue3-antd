@@ -1,13 +1,15 @@
+
 import { App, inject, Plugin, } from "vue";
 import { IonModalController } from "./ion-modal.ctrl";
-import IonModalToolbarCom from './ion-modal.toolbar.vue';
+import IonModalFooter from './ion-modal-footer.vue'
+import IonModalHeader from './ion-modal-header.vue'
 const IonModalSymbol = Symbol()
 
 export function useIonModal(): IonModalController {
 
     const ionModal = inject<IonModalController>(IonModalSymbol)
     if (!ionModal) {
-        throw new Error('No DzModal provided!')
+        throw new Error('No IonModal provided!')
     }
     return ionModal;
 }
@@ -17,7 +19,8 @@ const plugin: Plugin = {
         const ionModal = new IonModalController(app)
         app.config.globalProperties.$modal = ionModal;
         app.provide(IonModalSymbol, ionModal);
-        app.component('IonModalToolbar', IonModalToolbarCom)
+        app.component('IonModalFooter', IonModalFooter);
+        app.component('IonModalHeader', IonModalHeader)
     }
 }
 export default plugin;

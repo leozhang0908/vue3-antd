@@ -1,9 +1,8 @@
 <template>
-  <svg :name="props.name" v-bind="$attrs" class="ion-icon" :style="getStyle" aria-hidden="true">
+  <svg v-bind="$attrs" class="ion-icon" :style="getStyle" aria-hidden="true">
     <use :xlink:href="symbolId" />
   </svg>
 </template>
-
 <script lang="ts" setup>
 import { computed, type CSSProperties } from 'vue';
 
@@ -16,7 +15,7 @@ try {
 }
 
 defineOptions({
-  name: 'ion-icon',
+  name: 'ion-icon'
 });
 
 const props = defineProps({
@@ -36,7 +35,7 @@ const props = defineProps({
 const symbolId = computed(() => `#${props.prefix}-${props.name}`);
 const getStyle = computed((): CSSProperties => {
   const { size } = props;
-  const s = size;
+  const s = Number(size) ? `${size}px` : size;
   return {
     width: s,
     height: s,
@@ -47,7 +46,7 @@ const getStyle = computed((): CSSProperties => {
 <style lang="less">
 .ion-icon {
   overflow: hidden;
-  vertical-align: middle; // -0.15em;
+  vertical-align: -0.15em;
   fill: currentColor;
 }
 </style>

@@ -2,31 +2,30 @@
   <Layout.Header class="layout-header" theme="light">
     <Space :size="20">
       <slot>
-        <Space :size="20">
-          <span class="menu-fold" @click="() => emit('update:collapsed', !collapsed)">
-            <component :is="collapsed ? MenuUnfoldOutlined : MenuFoldOutlined" />
-          </span>
-          <Breadcrumb>
-            <template v-for="(routeItem, rotueIndex) in menus" :key="routeItem?.path">
-              <Breadcrumb.Item>
+        <Breadcrumb>
+          <template v-for="(routeItem, rotueIndex) in menus" :key="routeItem?.name">
+            <Breadcrumb.Item>
+              <Space :size="5">
+                <ion-icon size="14px" v-if="routeItem?.meta?.icon" :name="routeItem?.meta?.icon" />
                 <span>{{ routeItem?.meta?.title }}</span>
-                <template v-if="routeItem?.children?.length" #overlay>
-                  <Menu :selected-keys="getSelectKeys(rotueIndex)">
-                    <template v-for="childItem in routeItem?.children" :key="childItem.name">
-                      <Menu.Item v-if="
-                        !childItem.meta?.hidden &&
-                        childItem.meta?.breadcrumb !== false
-                      " :key="childItem.name" @click="clickMenuItem(childItem)">
-                        {{ childItem.meta?.title }}
-                        <!-- <TitleI18n :title="childItem.meta?.title" /> -->
-                      </Menu.Item>
-                    </template>
-                  </Menu>
-                </template>
-              </Breadcrumb.Item>
-            </template>
-          </Breadcrumb>
-        </Space>
+              </Space>
+
+              <template v-if="routeItem?.children?.length" #overlay>
+                <Menu :selected-keys="getSelectKeys(rotueIndex)">
+                  <template v-for="childItem in routeItem?.children" :key="childItem.name">
+                    <Menu.Item v-if="
+                      !childItem.meta?.hidden &&
+                      childItem.meta?.breadcrumb !== false
+                    " :key="childItem.name" @click="clickMenuItem(childItem)">
+                      {{ childItem.meta?.title }}
+                      <!-- <TitleI18n :title="childItem.meta?.title" /> -->
+                    </Menu.Item>
+                  </template>
+                </Menu>
+              </template>
+            </Breadcrumb.Item>
+          </template>
+        </Breadcrumb>
       </slot>
     </Space>
     <Space :size="20">
@@ -57,12 +56,10 @@
 </template>
 
 <script lang="tsx" setup>
-import { computed, nextTick, PropType, type CSSProperties } from 'vue';
+import { computed, nextTick } from 'vue';
 import { useRouter, useRoute, RouteRecordRaw } from 'vue-router';
 import {
   QuestionCircleOutlined,
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
   PoweroffOutlined,
   SettingOutlined
 } from '@ant-design/icons-vue';
@@ -74,8 +71,7 @@ import {
   Menu,
   Space,
   Breadcrumb,
-  Avatar,
-  type MenuTheme,
+  Avatar
 } from 'ant-design-vue';
 
 import { useUserStore } from '@/store/modules/user.store';
@@ -84,12 +80,8 @@ import { useKeepAliveStore } from '@/store/modules/keepAlive.store'
 defineProps({
   collapsed: {
     type: Boolean,
-  },
-  theme: {
-    type: String as PropType<MenuTheme>,
-  },
+  }
 });
-const emit = defineEmits(['update:collapsed']);
 const userStore = useUserStore();
 // const themeStore = useThemeStore();
 // const lockscreenStore = useLockscreenStore();
@@ -193,14 +185,14 @@ const doLogout = () => {
 .layout-header {
   position: fixed;
   width: 100%;
+  right: 0px;
   top: 0;
   z-index: 10;
   display: flex;
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 1px 4px 0 rgb(0 21 41 / 12%);
-  transition: background 0.3s, width 0.2s;
-  // color: rgba(0, 0, 0, .85);
+  padding: 0 24px;
 
   * {
     cursor: pointer;

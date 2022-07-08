@@ -1,3 +1,6 @@
+<ion-modal-header>
+    Content of header
+</ion-modal-header>
 <div class="modal-tables ion-modal">
     <a-tabs v-model:activeKey="activeKey" type="card">
         <a-tab-pane key="1" tab="Tab Title 1">
@@ -32,7 +35,9 @@
             <a-button v-if="current > 0" style="margin-left: 8px" @click="prev">Previous</a-button>
         </div>
     </div>
-    <a-button style="margin: 20px;" type="primary" @click="$emit('dismiss',{action:'close'})">dismiss</a-button>
-    <a-button style="margin: 20px;" type="primary" @click="$emit('fullscreen',true)">fullscreen</a-button>
-    <a-button style="margin: 20px;" type="primary" @click="$emit('minimize',true)">minimize</a-button>
 </div>
+<ion-modal-footer>
+    <a-button type="primary" @click="$emit('dismiss',{action:'close'})">dismiss</a-button>
+    <a-button type="primary" @click="$emit('fullscreen',true)">fullscreen</a-button>
+    <a-button type="primary" @click="$emit('minimize',true)">minimize</a-button>
+</ion-modal-footer>
