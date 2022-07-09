@@ -1,14 +1,15 @@
 import { type RouteRecordRaw } from 'vue-router';
 import Layout from '@/layout/index.vue'
 
-export const homeRouting: RouteRecordRaw = {
+export default <RouteRecordRaw>{
   path: '/home',
   component: Layout,
   redirect: '/home/home-a',
-  name:'home',
+  index: 1,
+  name: 'home',
   meta: {
     title: 'home',
-    icon: 'home'
+    icon: 'home',
   },
   children: [
     {

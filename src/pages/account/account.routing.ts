@@ -2,17 +2,19 @@
 import { RouteRecordRaw } from 'vue-router'
 import Layout from '@/layout/index.vue'
 
-export const accountRouting: RouteRecordRaw = {
+export default <RouteRecordRaw>{
   path: '/account',
   component: Layout,
   redirect: '/account',
   meta: { hidden: true },
+  index: 3,
   children: [{
     path: '',
     component: () => import(/* webpackChunkName: "account-page" */ '@/pages/account/account.page.vue'),
     name: 'account-page',
     meta: {
-      title: 'account'
+      title: 'account',
+
     }
   }]
 }

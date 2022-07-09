@@ -31,6 +31,7 @@ export const filterAsyncRoutes = (routes: RouteRecordRaw[], roles: string[]) => 
   })
   return res
 }
+
 export const usePermissionStore = defineStore({
   id: 'permission',
   state: (): Permission => ({
@@ -59,14 +60,14 @@ export const usePermissionStore = defineStore({
     },
 
     getMenus() {
-      let map = (item: RouteRecordRaw, parent?: RouteRecordRaw) => {
+      const map = (item: RouteRecordRaw, parent?: RouteRecordRaw) => {
         if (parent) {
           item.path = resolve(parent.path, item.path);
         }
-        if (item.children?.filter(s => !s.meta?.hidden).length < 2) {
+        if (item.children?.filter(s => !s.meta?.hidden).length < 2 && !item.meta?.title) {
           item = <RouteRecordRaw>{ ...item, ...item.children[0], path: resolve(item.path, item.children[0].path), children: [] }
         }
-        if (item.meta && item?.name) {
+        if (item.meta && item.name) {
           item.meta.namePath = (parent?.meta?.namePath || []).concat([<string>item.name])
           item.meta.fullpath = item.meta.fullpath || item.path;
         }

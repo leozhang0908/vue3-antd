@@ -10,7 +10,7 @@
                 <span>{{ routeItem?.meta?.title }}</span>
               </Space>
 
-              <template v-if="routeItem?.children?.length" #overlay>
+              <template v-if="routeItem?.children?.length>1" #overlay>
                 <Menu :selected-keys="getSelectKeys(rotueIndex)">
                   <template v-for="childItem in routeItem?.children" :key="childItem.name">
                     <Menu.Item v-if="

@@ -1,6 +1,11 @@
 
-import { type RouteMeta as VRouteMeta } from 'vue-router';
+import { type RouteMeta as VRouteMeta, type _RouteRecordBase as _VRouteRecordBase } from 'vue-router';
 declare module 'vue-router' {
+    interface _RouteRecordBase extends _VRouteRecordBase {
+        /**排序索引 */
+        index?: number;
+    }
+
     interface RouteMeta extends VRouteMeta {
         /** 标题 */
         title?: string;
@@ -20,5 +25,6 @@ declare module 'vue-router' {
         breadcrumb?: boolean;
         /** 设置当前路由高亮的菜单项，值为route fullPath或route name,一般用于详情页 */
         activeMenu?: string;
+
     }
 }

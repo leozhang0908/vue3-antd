@@ -1,6 +1,6 @@
 import { RouteRecordRaw } from 'vue-router'
 import Layout from '@/layout/index.vue'
-export const formRouting: RouteRecordRaw = {
+export default <RouteRecordRaw>{
   path: '/form',
   component: Layout,
   redirect: '/form',
@@ -10,7 +10,7 @@ export const formRouting: RouteRecordRaw = {
     name: 'form-page',
     meta: {
       title: 'form',
-      icon:'form'
+      icon: 'form'
     }
   }]
 }
