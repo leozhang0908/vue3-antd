@@ -1,7 +1,7 @@
 <template>
     <div class="cxmt-map">
         <a-space :size="5" class="buttons">
-            <a-button @click="trigger(item)" size="small" :ghost="!item.checked" type="primary" v-for='item in items'>{{
+            <a-button @click="trigger(item)" size="small" :ghost="!item.checked" type="primary" v-for='item in items' :key="item.step">{{
                     item.step
             }}
             </a-button>
@@ -488,7 +488,7 @@
                         style="fill:rgb(173,189,199);" />
                 </g>
                 <template v-for="item in items" :key="item.step">
-                    <template v-for="point in item.points" :key="index">
+                    <template v-for="(point,index) in item.points" :key="index">
                         <g :select="location?.name == point.name" @click="location = point" class="docker"
                             :name="point.name" v-if="point.marker" v-html="point.marker"></g>
                     </template>

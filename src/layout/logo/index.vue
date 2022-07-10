@@ -1,8 +1,9 @@
+<!-- eslint-disable no-undef -->
 <template>
   <a-popover :visible="visible" placement="topRight" color="rgba(0,0,0,.9)">
     <template #content>
       <a-row :gutter="[16, 16]" align="middle">
-        <a-col :span="6" v-for="item in appsData" @click="open(item)">
+        <a-col :span="6" v-for="item in appsData" @click="open(item)" :key="item.name">
           <div class="gutter-box">
             <ant-icon :name="item.icon" v-if='item?.icon'></ant-icon>
             <div class="title">{{ item?.name }}</div>

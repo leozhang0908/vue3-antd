@@ -14,7 +14,7 @@ export class IonModalController {
         this._$containers.classList.add('ion-modals')
         document.body.appendChild(this._$containers);
     }
-    public create(component: Component | string, componentProps: {}, modalProps?: ModalProps & { id?, icon?}): Promise<IonModal> {
+    public create(component: Component | string, componentProps, modalProps?: ModalProps & { id?, icon?}): Promise<IonModal> {
         return new Promise((reslove, reject) => {
             if (!this._app) {
                 reject('_app is undefined')

@@ -24,11 +24,11 @@ export default defineComponent({
   props: {
     modalProps: {
       type: Object,
-      default: {}
+      default: ()=>{}
     },
     componentProps: {
       type: Object,
-      default: {}
+      default: ()=>{}
     },
     component: {
       type: [Object, String] as PropType<Component | string>,
@@ -47,14 +47,14 @@ export default defineComponent({
     this.modalProps.destroyOnClose = false;
 
     if (modalBody.querySelector('[name="ion-modal-footer"]')) {
-      this.modalProps.footer = ' ';
+      this.modalProps.footer = ' '
     }
     if (modalBody.querySelector('[name="ion-modal-header"]')) {
-      this.modalProps.title = ' ';
+      this.modalProps.title = ' '
     }
     this.visible = false;
-    this.$nextTick(() => {
-      this.modalProps.wrapClassName = <any>'ready';
+    this.$nextTick(()=> {
+      this.modalProps.wrapClassName = 'ready';
       this.onCreated(this);
       this.modalProps.destroyOnClose = true;
     });
@@ -107,7 +107,7 @@ export default defineComponent({
       }
     });
 
-    const transformStyle = computed<String>(() => {
+    const transformStyle = computed<string>(() => {
       return `translate(${transformX.value}px, ${transformY.value}px)`
     });
 

@@ -1,11 +1,11 @@
 import { createRouter, createWebHashHistory } from "vue-router"
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import Layout from '@/layout/index.vue'
 import type { RouteRecordRaw } from 'vue-router'
 
 export const constantRoutes: RouteRecordRaw[] = [
   {
     path: '/',
-    component: Layout,
     redirect: '/home'
   }
 ]
@@ -26,7 +26,6 @@ function generateRoutes(): RouteRecordRaw[] {
   })
   return routes.sort((a, b) => (a.index || a.children[0]?.index || 9999) - (b.index || b.children[0]?.index || 9999))
 }
-console.log(asyncRoutes)
 
 const router = createRouter({
   // process.env.BASE_URL

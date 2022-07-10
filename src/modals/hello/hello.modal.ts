@@ -11,6 +11,5 @@ import { Options, Vue } from 'vue-class-component';
 
 export default class extends Vue {
 
-  mounted() {
-  }
+  mounted() {}
 }
