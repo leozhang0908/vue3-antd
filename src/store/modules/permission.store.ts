@@ -64,7 +64,8 @@ export const usePermissionStore = defineStore({
         if (parent) {
           item.path = resolve(parent.path, item.path);
         }
-        if (item.children?.filter(s => !s.meta?.hidden).length < 2 && !item.meta?.title) {
+        let childs = item.children?.filter(s => !s.meta?.hidden)
+        if (childs?.length === 1 && (!item.meta?.title || !childs[0].meta?.title)) {
           item = <RouteRecordRaw>{ ...item, ...item.children[0], path: resolve(item.path, item.children[0].path), children: [] }
         }
         if (item.meta && item.name) {
@@ -72,7 +73,7 @@ export const usePermissionStore = defineStore({
           item.meta.fullpath = item.meta.fullpath || item.path;
         }
         if (item.children?.length) {
-          item.children = <any>item.children.filter(a => !a.meta?.hidden).map(b => map(b, item))
+          item.children = childs.map(b => map(b, item))
         }
         return item;
       }
@@ -80,6 +81,7 @@ export const usePermissionStore = defineStore({
     }
   },
 });
+
 
 // 在组件setup函数外使用
 export function usePermissionStoreWithOut() {

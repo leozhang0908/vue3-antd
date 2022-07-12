@@ -1,11 +1,12 @@
 <div class="page-home ion-page" v-loading="loading">
     <a-button type="primary" @click="openHw">open HelloWorld component</a-button>
+    <ion-icon name="moon"></ion-icon>
+    <a-button style="margin: 20px;" type="primary" v-routerLink="'/about'">v-routerLink about</a-button>
+    <a-button style="margin: 20px;" type="primary" @click="loading=1">loading</a-button>
     <excelBtn />
     <a-row>
         <echart type="scatter" :options="chartOpts" height="400px" @onClick="onDotClick"></echart>
         <echart :options="heatmapOpts" height="400px" @onClick="onDotClick"></echart>
     </a-row>
-    <ion-icon name="moon"></ion-icon>
-    <a-button style="margin: 20px;" type="primary" v-routerLink="'/about'">v-routerLink about</a-button>
-    <a-button style="margin: 20px;" type="primary" @click="loading=1">loading</a-button>
+
 </div>
