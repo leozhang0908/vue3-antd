@@ -1,8 +1,9 @@
 import { RouteRecordRaw } from 'vue-router'
 import Layout from '@/layout/index.vue'
+import { shallowRef } from 'vue'
 export default <RouteRecordRaw>{
   path: '/form',
-  component: Layout,
+  component: shallowRef(Layout),
   redirect: '/form',
   children: [{
     path: '',

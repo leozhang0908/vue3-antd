@@ -29,7 +29,7 @@ service.interceptors.request.use(
     // Add Authorization header to every request, you can add other custom headers here
     const userStore = useUserStore();
     if (userStore.getToken) {
-      config.headers['X-Acess-Token'] = userStore.getToken
+      config.headers['X-Access-Token'] = userStore.getToken
     }
     if (config.data) {
       config.data = exNull(config.data)
@@ -45,14 +45,21 @@ service.interceptors.request.use(
 )
 // Response interceptors
 service.interceptors.response.use(
-  (response) => response.data,
+  (response) => {
+    const { code, data, successful } = response.data;
+    if (code == 200 || code == 'OK' || successful === true) {
+      return data
+    }else{
+      return Promise.reject(response.data)
+    }
+  },
   (error) => {
     message.error(error?.response?.data?.message || error.message)
     if (error?.response?.status == 401) {
       // location.reload()
       if (!location.search.includes('code')) {
-        location.replace(error?.response?.data)
         useUserStore().resetToken();
+        location.replace(error?.response?.data)
       }
     }
     console.error(error)

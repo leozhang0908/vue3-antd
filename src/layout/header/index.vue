@@ -31,8 +31,8 @@
     <Space :size="20">
       <SettingOutlined />
       <Dropdown placement="bottomRight">
-        <Avatar :src="userInfo.headImg" :alt="userInfo.name">{{
-            userInfo.name
+        <Avatar :src="userInfo.picture" :alt="userInfo.nickname">{{
+            userInfo.nickname
         }}</Avatar>
         <template #overlay>
           <Menu>
@@ -83,21 +83,11 @@ defineProps({
   }
 });
 const userStore = useUserStore();
-// const themeStore = useThemeStore();
-// const lockscreenStore = useLockscreenStore();
 const keepAliveStore = useKeepAliveStore();
 
 const router = useRouter();
 const route = useRoute();
 const userInfo = computed(() => userStore.userInfo);
-// const headerStyle = computed<CSSProperties>(() => {
-//   const { navTheme, layout } = themeStore;
-//   const isDark = navTheme === 'dark' && layout === 'topmenu';
-//   return {
-//     backgroundColor: navTheme === 'realDark' || isDark ? '' : 'rgba(255, 255, 255, 0.85)',
-//     color: isDark ? 'rgba(255, 255, 255, 0.85)' : '',
-//   };
-// });
 
 const menus = computed(() => {
   const matched = route.matched.filter(

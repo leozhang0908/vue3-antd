@@ -29,7 +29,8 @@ export class Http {
   static delete(url: string, body?: any): Promise<any> {
     return this.request(url, 'delete', body)
   }
-  static download(url:string, body:Object, fileName:string) {
+
+  static download(url:string, body:any, fileName:string) {
     return request({
       method: 'get',
       url,

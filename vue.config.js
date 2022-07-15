@@ -1,20 +1,23 @@
 const path = require('path');
 const { defineConfig } = require('@vue/cli-service')
 const resolve = (dir) => path.join(__dirname, dir); // 路径
+const createProxy = () => {
+  let proxy = {};
+  eval(process.env.VUE_APP_PROXY).forEach(v => {
+    proxy[[v[0]]] = {
+      target: v[1],
+      changeOrigin: true
+    }
+  })
+  return { proxy };
+}
 
 module.exports = defineConfig({
   lintOnSave: false, //关闭eslint检查
   // publicPath: isDev ? '' : querystring.unescape('<%=request.getContextPath()%>'),
   publicPath: '/',
   productionSourceMap: false,
-  devServer: {
-    proxy: {
-      [process.env.VUE_APP_BASE_API]: {
-        target: process.env.VUE_APP_API_URL,
-        changeOrigin: true,
-      }
-    }
-  },
+  devServer: createProxy(),
   css: {
     loaderOptions: {
       less: {
@@ -24,8 +27,7 @@ module.exports = defineConfig({
         },
         additionalData: `
           @import "ant-design-vue/lib/style/themes/default.less";
-          @import "~@/styles/variables.less";
-      `,
+          @import "~@/styles/variables.less";`,
       },
     }
   },

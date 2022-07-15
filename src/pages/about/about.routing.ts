@@ -1,10 +1,10 @@
 
 import { RouteRecordRaw } from 'vue-router'
 import Layout from '@/layout/index.vue'
-
+import { shallowRef } from 'vue'
 export default <RouteRecordRaw>{
   path: '/about',
-  component: Layout,
+  component: shallowRef(Layout),
   redirect: '/about',
   index: 2,
   name: 'about',

@@ -4,74 +4,69 @@ import { Storage } from '@/utils/Storage';
 import { resetRouter } from '@/router';
 import { UsersService } from '@/services/users';
 
+interface IUserInfo {
+  email: string;
+  gender: string;
+  name: string;
+  nickname: string;
+  phone: string;
+  picture: string;
+  username: string;
+}
+
 interface UserState {
   token: string;
-  name: string;
-  avatar: string;
   menus: any[];
-  userInfo: any;
+  userInfo: IUserInfo;
   roles: string[];
 }
 
 export const useUserStore = defineStore({
   id: 'user',
   state: (): UserState => ({
-    token: 'ACCESS_TOKEN_KEY' || Storage.get('ACCESS_TOKEN_KEY', null),
-    name: 'amdin',
-    avatar: '',
+    token: Storage.get('ACCESS_TOKEN_KEY', 'ACCESS_TOKEN_KEY'),
     menus: [],
-    userInfo: {},
+    userInfo: <IUserInfo>{},
     roles: []
   }),
   getters: {
     getToken(): string {
       return this.token;
     },
-    getAvatar(): string {
-      return this.avatar;
-    },
-    getName(): string {
-      return this.name;
+
+    getUserInfo(): IUserInfo {
+      return this.userInfo;
     },
     getRoles(): string[] {
       return this.roles
     }
   },
   actions: {
+    async getTokenWithUserInfo(code?) {
+      let token = code ? (await UsersService.getAsyncToken(code).catch(ex => ex) || 'token') : this.getToken;
+      this.setToken(token);
+      return UsersService.userInfo(token).then(res => {
+        this.userInfo = res;
+        console.log(res)
+        this.roles.push('admin');
+      }).catch(ex => ex)
+    },
+
+
     /** 清空token及用户信息 */
     resetToken() {
-      this.avatar = this.token = this.name = '';
       this.menus = [];
-      this.userInfo = {};
+      this.roles = [];
+      this.userInfo = <IUserInfo>{};
       Storage.clear();
     },
+
     /** 登录成功保存token */
     setToken(token: string) {
       this.token = token ?? '';
       Storage.set('ACCESS_TOKEN_KEY', this.token);
     },
-    /** 登录 */
-    async getAuth(userInfo: { code: string, appId: string }) {
-      return UsersService.login(userInfo)
-        .then(async res => {
-          this.setToken(res)
-          return await this.getUserInfo()
-        }).catch(ex => ex)
-    },
-    /** 登录成功之后, 获取用户信息以及生成权限路由 */
-    async getUserInfo() {
-      try {
-        // const [userInfo, { perms, menus }] = await Promise.all([getInfo(), permmenu()]);
-        const userInfo = { "name": "路飞", "nickName": "", "email": "1743369777@qq.com", "phone": "13553550634", "remark": null, "headImg": "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80" }//await UsersService.info();
-        this.name = userInfo.name;
-        this.avatar = userInfo.headImg;
-        this.userInfo = userInfo;
-        this.roles.push('admin')
-        return userInfo;
-      } catch (error) {
-        return Promise.reject(error);
-      }
-    },
+
     /** 登出 */
     async logout() {
       this.resetToken();

@@ -18,7 +18,8 @@ export default class HomeAPage extends Vue {
     loading = false
     mounted() {
         console.log('mounted', this.$route.query)
-        // UsersService.userInfo()
+        // UsersService.userInfo('22')
+        // UsersService.info()
     }
 
     async openHw() {

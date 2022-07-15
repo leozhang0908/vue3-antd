@@ -1,14 +1,20 @@
 
 import { Http } from '@/http'
+
 export class UsersService {
-  static userInfo() {
-    Http.get('eosat/v1/category', { name: '哈哈更新', orderName: 'create_time', orderType: 'desc' })
+  static listAll() {
+    return Http.get('admin/banner/listAll');
+  }
+  static async getAsyncToken(code) {
+    return Http.get('gateway/authing/token', { appId: process.env.VUE_APP_ID, code })
+  }
+
+  static userInfo(token) {
+    console.log()
+    return Http.get('cnap/kernel/v1/authentication/user', { token })
   }
   static resetPassword(id) {
     return Http.post('User/Password/Force', { id })
-  }
-  static login(data: { code, appId }) {
-    return Http.get('gateway/authing/token', data);
   }
   static info() {
     return Promise.resolve(<any>{ "name": "路飞", "nickName": "", "email": "1743369777@qq.com", "phone": "13553550634", "remark": null, "headImg": "https://buqiyuan.gitee.io/img/logo.jpg", "loginIp": "112.26.28.169" })
